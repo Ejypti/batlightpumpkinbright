@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bat Light Pumpkin Bright</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Press+Start+2P&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(ellipse at bottom, #00010a 0%, #001622 80%);
+      color: #fff;
+      font-family: 'Press Start 2P', cursive, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Stars */
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      width: 3px;
+      height: 3px;
+      box-shadow: 0 0 8px 2px rgba(255,255,255,0.8);
+      animation: twinkle 2.5s infinite alternate ease-in-out;
+      filter: drop-shadow(0 0 3px white);
+    }
+
+    @keyframes twinkle {
+      from { opacity: 0.3; transform: scale(1); }
+      to { opacity: 1; transform: scale(1.5); }
+    }
+
+    /* Moon */
+    .moon {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: 110px;
+      height: 110px;
+      background: radial-gradient(circle at center, #f5f5f5, #a9a9a9);
+      border-radius: 50%;
+      box-shadow:
+        0 0 30px 10px rgba(255, 255, 255, 0.6),
+        inset -10px -10px 20px #ddd,
+        inset 10px 10px 20px #999;
+      z-index: 5;
+      filter: drop-shadow(0 0 12px #f5f5f5);
+    }
+
+    /* Grass */
+    .grass {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      background: linear-gradient(to top, #04300a 0%, #08600f 100%);
+      border-top-left-radius: 50% 40px;
+      border-top-right-radius: 50% 40px;
+      box-shadow: inset 0 6px 15px rgba(0, 0, 0, 0.8);
+      z-index: 2;
+    }
+
+    /* Bats */
+    .batbrown, .batgrey {
+      width: 100px;
+      position: absolute;
+      bottom: 500px;
+      z-index: 6;
+      filter: drop-shadow(0 0 4px rgba(0,0,0,0.7));
+      animation: wingflap 1.5s infinite ease-in-out;
+      transition: left 0.2s ease;
+      user-select: none;
+    }
+
+    @keyframes wingflap {
+      0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+      50% { transform: translateY(-10px) rotate(5deg) scale(1.05); }
+    }
+
+    /* Pumpkins */
+    .pumpkinLight {
+      position: absolute;
+      bottom: 20px;
+      width: 80px;
+      z-index: 4;
+      filter: drop-shadow(0 0 8px rgba(255,140,0,0.6));
+      transition: filter 0.3s ease, transform 0.3s ease;
+      user-select: none;
+    }
+    .pumpkinLight.lit {
+      filter: drop-shadow(0 0 15px #ff8c00) drop-shadow(0 0 20px #ffb347);
+      transform: scale(1.05);
+    }
+
+    /* Flame */
+    .flame {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      z-index: 7;
+      filter: drop-shadow(0 0 6px #ff6600);
+      animation: flicker 0.4s infinite alternate ease-in-out;
+      user-select: none;
+      pointer-events: none;
+    }
+    @keyframes flicker {
+      0% { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.1) translateY(-2px); }
+    }
+
+    /* Start overlay & menu */
+    #startOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 15;
+      backdrop-filter: blur(5px);
+      user-select: none;
+    }
+
+    #startMenu {
+      background: #111;
+      padding: 40px 60px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 0 30px #ff8c00;
+      border: 2px solid #ff8c00;
+      max-width: 320px;
+    }
+
+    #startMenu h2 {
+      color: #ff8c00;
+      margin-bottom: 25px;
+      font-size: 2.5rem;
+      font-family: 'Creepster', cursive;
+      text-shadow: 0 0 10px #ff8c00;
+      user-select: none;
+    }
+
+    #startMenu p {
+      font-size: 0.85rem;
+      margin: 8px 0;
+      font-weight: bold;
+      color: #ffb347;
+      text-shadow: 0 0 4px #ffa500;
+      user-select: none;
+    }
+
+    #startButton {
+      padding: 14px 30px;
+      font-size: 1.2rem;
+      background: linear-gradient(45deg, #ff8c00, #ffb347);
+      color: #2a1400;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #ff8c00;
+      font-weight: 700;
+      transition: background 0.4s, box-shadow 0.4s;
+      user-select: none;
+      margin-top: 15px;
+    }
+
+    #startButton:hover {
+      background: linear-gradient(45deg, #ffaa00, #ffd580);
+      box-shadow: 0 0 30px #ffaa00;
+    }
+
+    /* Scoreboard, timer, round */
+    #scoreBoard, #timer, #roundCount, #highScores {
+      position: fixed;
+      background: rgba(0,0,0,0.7);
+      padding: 12px 24px;
+      border-radius: 14px;
+      font-family: 'Press Start 2P', cursive, monospace;
+      font-weight: 700;
+      text-shadow: 0 0 6px #ffa500;
+      user-select: none;
+      box-shadow: 0 0 10px #ff8c00;
+      color: #fff;
+      z-index: 10;
+    }
+    #scoreBoard {
+      top: 20px;
+      right: 20px;
+      text-align: left;
+      min-width: 150px;
+    }
+    #timer {
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #ffcc00;
+      font-size: 1.3rem;
+      min-width: 140px;
+    }
+    #roundCount {
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1rem;
+      min-width: 120px;
+      color: #ffb347;
+      text-shadow: 0 0 5px #ffb347;
+    }
+    #highScores {
+      bottom: 110px;
+      left: 20px;
+      text-align: left;
+      min-width: 170px;
+      font-size: 1rem;
+      color: #ffb347;
+      text-shadow: 0 0 5px #ffb347;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="moon"></div>
+  <!-- Stars -->
+  <div class="star" style="top: 10px; left: 50px; animation-delay: 0s;"></div>
+  <div class="star" style="top: 40px; left: 120px; animation-delay: 1s;"></div>
+  <div class="star" style="top: 60px; left: 200px; animation-delay: 0.5s;"></div>
+  <div class="star" style="top: 30px; left: 300px; animation-delay: 1.5s;"></div>
+  <div class="star" style="top: 80px; left: 400px; animation-delay: 0.8s;"></div>
+
+  <div class="grass"></div>
+
+  <div id="startOverlay">
+    <div id="startMenu">
+      <h2>Bat Light Pumpkin Bright</h2>
+      <p>Brown Bat: Z/X to move, C to drop flame</p>
+      <p>Grey Bat: N/M to move, B to drop flame</p>
+      <button id="startButton">Start Game</button>
+    </div>
+  </div>
+
+  <img src="bat_brown.png" class="batbrown" id="player1" style="left: 50px;" draggable="false" alt="Brown Bat">
+  <img src="bat_grey.png" class="batgrey" id="player2" style="left: 300px;" draggable="false" alt="Grey Bat">
+
+  <img src="pumpkin1_off.png" class="pumpkinLight" id="pumpkin1" style="left: 180px;" draggable="false" alt="Pumpkin 1">
+  <img src="pumpkin1_off.png" class="pumpkinLight" id="pumpkin2" style="left: 360px;" draggable="false" alt="Pumpkin 2">
+  <img src="pumpkin2_off.png" class="pumpkinLight" id="pumpkin3" style="left: 540px;" draggable="false" alt="Pumpkin 3">
+  <img src="pumpkin2_off.png" class="pumpkinLight" id="pumpkin4" style="left: 720px;" draggable="false" alt="Pumpkin 4">
+
+  <div id="scoreBoard">
+    <p>Player 1 Score: <span id="score1">0</span></p>
+    <p>Player 2 Score: <span id="score2">0</span></p>
+  </div>
+
+  <div id="timer">Time Left: <span id="time">60</span>s</div>
+  <div id="roundCount">Round: <span id="roundNum">0</span> / 5</div>
+
+  <div id="highScores">
+    <p>High Scores</p>
+    <p>P1: <span id="high1">0</span> | P2: <span id="high2">0</span></p>
+  </div>
+
+  <script>
+    let score1 = 0, score2 = 0;
+    let high1 = parseInt(localStorage.getItem('high1')) || 0;
+    let high2 = parseInt(localStorage.getItem('high2')) || 0;
+    document.getElementById('high1').textContent = high1;
+    document.getElementById('high2').textContent = high2;
+
+    const totalRounds = 5;
+    let currentRound = 0;
+
+    const player1 = document.getElementById('player1');
+    const player2 = document.getElementById('player2');
+    const score1Display = document.getElementById('score1');
+    const score2Display = document.getElementById('score2');
+    const timerDisplay = document.getElementById('time');
+    const roundDisplay = document.getElementById('roundNum');
+    const startOverlay = document.getElementById('startOverlay');
+    const startButton = document.getElementById('startButton');
+
+    let p1x = 50, p2x = 300;
+    const bottomY = 500;  // fixed bottom distance for bats
+    let timeLeft = 60, timer;
+    let gameEnded = false;
+
+    const pumpkins = [
+      { el: document.getElementById('pumpkin1'), lit: false, onImg: 'pumpkin1_on.png', offImg: 'pumpkin1_off.png' },
+      { el: document.getElementById('pumpkin2'), lit: false, onImg: 'pumpkin1_on.png', offImg: 'pumpkin1_off.png' },
+      { el: document.getElementById('pumpkin3'), lit: false, onImg: 'pumpkin2_on.png', offImg: 'pumpkin2_off.png' },
+      { el: document.getElementById('pumpkin4'), lit: false, onImg: 'pumpkin2_on.png', offImg: 'pumpkin2_off.png' }
+    ];
+
+    player1.style.bottom = bottomY + 'px';
+    player2.style.bottom = bottomY + 'px';
+
+    function startGame() {
+      if (currentRound === 0) {
+        // first time start, reset scores
+        score1 = 0;
+        score2 = 0;
+        score1Display.textContent = '0';
+        score2Display.textContent = '0';
+      }
+
+      startOverlay.style.display = 'none';
+      gameEnded = false;
+      timeLeft = 60;
+      timerDisplay.textContent = timeLeft;
+
+      currentRound++;
+      if (currentRound > totalRounds) {
+        // End of all rounds
+        let finalMsg = '';
+        if (score1 > score2) finalMsg = `Game Over! Player 1 wins overall!\nFinal Score: ${score1} - ${score2}`;
+        else if (score2 > score1) finalMsg = `Game Over! Player 2 wins overall!\nFinal Score: ${score2} - ${score1}`;
+        else finalMsg = `Game Over! It's an overall tie!\nFinal Score: ${score1} - ${score2}`;
+        alert(finalMsg);
+
+        updateHighScores();
+        currentRound = 0;
+        startOverlay.style.display = 'flex';
+        roundDisplay.textContent = currentRound;
+        return;
+      }
+
+      roundDisplay.textContent = currentRound;
+
+      // Reset pumpkins and add 'lit' class toggle for glow effect
+      pumpkins.forEach(p => {
+        p.lit = false;
+        p.el.src = p.offImg;
+        p.el.classList.remove('lit');
+      });
+
+      p1x = 50; p2x = 300;
+      player1.style.left = p1x + 'px';
+      player2.style.left = p2x + 'px';
+
+      timer = setInterval(() => {
+        timeLeft--;
+        timerDisplay.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          endRound("Time's up!");
+        }
+      }, 1000);
+    }
+
+    function endRound(msg) {
+      if (gameEnded) return;
+      gameEnded = true;
+      clearInterval(timer);
+      updateHighScores();
+      setTimeout(() => {
+        alert(`${msg} Round ${currentRound} complete!`);
+        startGame(); // start next round or end game if last round
+      }, 300);
+    }
+
+    function updateHighScores() {
+      if (score1 > high1) { 
+        high1 = score1; 
+        localStorage.setItem('high1', high1); 
+      }
+      if (score2 > high2) { 
+        high2 = score2; 
+        localStorage.setItem('high2', high2); 
+      }
+      document.getElementById('high1').textContent = high1;
+      document.getElementById('high2').textContent = high2;
+    }
+
+    function dropFlame(player, pid) {
+      if (gameEnded) return;
+      const flame = document.createElement('img');
+      flame.src = 'flame.png';
+      flame.className = 'flame';
+      flame.style.left = player.offsetLeft + 35 + 'px';
+      // Calculate flame start top relative to bottomY and window height:
+      flame.style.top = (window.innerHeight - bottomY - 40) + 'px'; 
+      document.body.appendChild(flame);
+
+      const interval = setInterval(() => {
+        let flameRect = flame.getBoundingClientRect();
+
+        flame.style.top = (flame.offsetTop + 5) + 'px';
+
+        for (let p of pumpkins) {
+          if (!p.lit) {
+            let pumpkinRect = p.el.getBoundingClientRect();
+            if (
+              flameRect.bottom >= pumpkinRect.top &&
+              flameRect.left + 10 >= pumpkinRect.left &&
+              flameRect.left <= pumpkinRect.right
+            ) {
+              p.lit = true;
+              p.el.src = p.onImg;
+              p.el.classList.add('lit');
+              if (pid === 1) score1Display.textContent = ++score1;
+              else score2Display.textContent = ++score2;
+              document.body.removeChild(flame);
+              clearInterval(interval);
+              checkRoundWin();
+              return;
+            }
+          }
+        }
+
+        if (flame.offsetTop > window.innerHeight - 50) {
+          document.body.removeChild(flame);
+          clearInterval(interval);
+        }
+      }, 30);
+    }
+
+    function checkRoundWin() {
+      if (pumpkins.every(p => p.lit)) {
+        const msg = score1 > score2 ? "Player 1 wins the round!" : score2 > score1 ? "Player 2 wins the round!" : "The round is a tie!";
+        endRound(msg);
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (gameEnded) return;
+      const max = window.innerWidth - 100;
+      if (e.key === 'z') p1x = Math.max(0, p1x - 10);
+      if (e.key === 'x') p1x = Math.min(max, p1x + 10);
+      if (e.key === 'n') p2x = Math.max(0, p2x - 10);
+      if (e.key === 'm') p2x = Math.min(max, p2x + 10);
+      player1.style.left = p1x + 'px';
+      player2.style.left = p2x + 'px';
+      if (e.key === 'c') dropFlame(player1, 1);
+      if (e.key === 'b') dropFlame(player2, 2);
+    });
+
+    startButton.addEventListener('click', () => {
+      if (currentRound === 0) startGame();
+    });
+  </script>
+</body>
+</html>
