@@ -223,14 +223,32 @@
     }
     #highScores {
       bottom: 110px;
-      left: 20px;
-      text-align: left;
+      right: 20px;
+      text-align: right;
       min-width: 170px;
       font-size: 1rem;
       color: #ffb347;
       text-shadow: 0 0 5px #ffb347;
     }
 
+ #resetHighScores {
+      margin-top: 8px;
+      padding: 6px 12px;
+      font-size: 0.7rem;
+      background: #222;
+      color: #ffb347;
+      border: 1px solid #ff8c00;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 6px #ff8c00;
+      font-family: 'Press Start 2P', monospace;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    #resetHighScores:hover {
+      background: #333;
+      box-shadow: 0 0 10px #ffaa00;
+    }
   </style>
 </head>
 <body>
@@ -272,6 +290,7 @@
   <div id="highScores">
     <p>High Scores</p>
     <p>P1: <span id="high1">0</span> | P2: <span id="high2">0</span></p>
+<button id="resetHighScores">Reset</button>
   </div>
 
   <script>
@@ -280,6 +299,17 @@
     let high2 = parseInt(localStorage.getItem('high2')) || 0;
     document.getElementById('high1').textContent = high1;
     document.getElementById('high2').textContent = high2;
+
+    document.getElementById('resetHighScores').addEventListener('click', () => {
+      if (confirm('Are you sure you want to reset high scores?')) {
+        localStorage.setItem('high1', 0);
+        localStorage.setItem('high2', 0);
+        high1 = 0;
+        high2 = 0;
+        document.getElementById('high1').textContent = high1;
+        document.getElementById('high2').textContent = high2;
+      }
+    });
 
     const totalRounds = 5;
     let currentRound = 0;
